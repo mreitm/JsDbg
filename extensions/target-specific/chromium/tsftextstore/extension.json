@@ -1,0 +1,24 @@
+{
+    "name": "TSFTextStore",
+    "author": "Snigdha Anupam",
+    "description": "Inspect the Chromium TSF text store.",
+    "dependencies": [
+        "dbgobject",
+        "user-editable-functions",
+        "tree-inspector",
+        "target-specific/stl-helpers",
+        "target-specific/chromium/chromium-helpers",
+        "target-specific/chromium/gfx-type-helpers"
+    ],
+    "includes": [
+        "tsftextstore.js"
+    ],
+    "augments": [
+        "dbgobject"
+    ],
+    "targetModules": [
+        "chrome",
+        "content_shell",
+        "browser_tests"
+    ]
+}
