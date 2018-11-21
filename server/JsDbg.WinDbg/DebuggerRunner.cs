@@ -121,19 +121,18 @@ namespace JsDbg.WinDbg {
 
             while (!this.isShuttingDown) {
                 try {
-                    int currentProcessSystemId = (int)(this.systemObjects.CurrentProcessSystemId);
-                    int currentThreadSystemId = (int)(this.systemObjects.CurrentThreadSystemId);
-                    if (this.TargetProcess == null) {
-                        this.SetTargetProcessFromId(currentProcessSystemId);
-                        if (this.TargetProcess != null) {
+                    if (!this.IsDebuggerBusy) {
+                        int currentProcessSystemId = (int)(this.systemObjects.CurrentProcessSystemId);
+                        int currentThreadSystemId = (int)(this.systemObjects.CurrentThreadSystemId);
+                        if (this.TargetProcess == null) {
+                            this.SetTargetProcessFromId(currentProcessSystemId);
+                            if (this.TargetProcess != null) {
+                                this.engine.NotifyDebuggerStatusChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingProcess);
+                            }
+                        } else if (this.TargetProcess.Id != currentProcessSystemId) {
+                            this.SetTargetProcessFromId(currentProcessSystemId);
                             this.engine.NotifyDebuggerStatusChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingProcess);
                         }
-                    } else if (this.TargetProcess.Id != currentProcessSystemId) {
-                        this.SetTargetProcessFromId(currentProcessSystemId);
-                        this.engine.NotifyDebuggerStatusChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingProcess);
-                    } else if(this.TargetThread.Id != currentThreadSystemId) {
-                        this.SetTargetThreadFromTargetProcess();
-                        this.engine.NotifyDebuggerStatusChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingThread);
                     }
 
                     this.client.DispatchCallbacks(TimeSpan.Zero);
