@@ -1,0 +1,15 @@
+{
+    "name": "TEB",
+    "author": "Sanket Joshi",
+    "description": "Visualize the thread environment block (TEB)",
+    "dependencies": [
+        "dbgobject",
+        "tree-inspector"
+    ],
+    "includes": [
+        "teb.js"
+    ],
+    "augments": [
+        "dbgobject"
+    ]
+}

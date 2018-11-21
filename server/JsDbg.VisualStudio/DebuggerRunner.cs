@@ -36,6 +36,13 @@ namespace JsDbg.VisualStudio {
             }
         }
 
+        public ulong TebLocation {
+            get {
+                // TODO
+                return 0;
+            }
+        }
+
         private void SetTargetProcessFromId(int processId) {
             try {
                 this.TargetProcess = Process.GetProcessById(processId);

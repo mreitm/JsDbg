@@ -44,6 +44,10 @@ namespace JsDbg.WinDbg {
             }
         }
 
+        public ulong TebLocation {
+            get { return this.runner.TebLocation; }
+        }
+
         private async Task<T> AttemptOperation<T>(Func<T> operation, string errorMessage) {
             bool retryAfterWaitingForBreak = false;
             do {

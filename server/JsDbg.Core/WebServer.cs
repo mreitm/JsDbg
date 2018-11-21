@@ -358,6 +358,9 @@ namespace JsDbg.Core {
                 case "typefields":
                     this.ServeTypeFields(query, respond, fail);
                     break;
+                case "teb":
+                    this.ServeTebLocation(query, respond, fail);
+                    break;
                 case "loadextension":
                     this.LoadExtension(query, respond, fail);
                     break;
@@ -940,6 +943,21 @@ namespace JsDbg.Core {
             }
 
             respond(responseString);
+        }
+
+        private void ServeTebLocation(NameValueCollection query, Action<string> respond, Action fail) {
+            ulong tebLocation = this.debugger.TebLocation;
+
+            if (tebLocation <= 0) {
+                respond(this.JSONError("Unable to access the persistent store."));
+            } else {
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ulong));
+                using (System.IO.MemoryStream memoryStream = new System.IO.MemoryStream()) {
+                    serializer.WriteObject(memoryStream, tebLocation);
+                    string result = Encoding.Default.GetString(memoryStream.ToArray());
+                    respond(result);
+                }
+            }
         }
 
         private static DataContractJsonSerializer ExtensionSerializer = new DataContractJsonSerializer(typeof(JsDbgExtension));

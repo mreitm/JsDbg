@@ -39,6 +39,10 @@ namespace JsDbg.WinDbg {
             get { return this.debugger; }
         }
 
+        public ulong TebLocation {
+            get { return this.systemObjects.CurrentThreadTeb; }
+        }
+
         private void SetTargetProcessFromId(int processId) {
             try {
                 this.TargetProcess = Process.GetProcessById(processId);
