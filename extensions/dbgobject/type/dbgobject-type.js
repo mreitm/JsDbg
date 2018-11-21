@@ -131,7 +131,7 @@ Loader.OnLoad(function () {
         if (this.isPointer()) {
             return DbgObjectType(this._name.substring(0, this._name.length - 1), this);
         } else {
-            return DbgObjectType("void", this);
+            return DbgObjectType(this._name, this);
         }
     }
 

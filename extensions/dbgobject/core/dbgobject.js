@@ -105,7 +105,7 @@ Loader.OnLoad(function() {
     DbgObject.teb = function() {
         return JsDbgPromise.LookupTebLocation()
         .then((tebLocation) => {
-            return DbgObject.create(DbgObjectType("ntdll", "void*"), tebLocation);
+            return DbgObject.create(DbgObjectType("ntdll", "_TEB"), tebLocation);
         });
     }
 

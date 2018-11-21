@@ -375,7 +375,7 @@ Loader.OnLoad(function() {
                 if (fieldType.isPointer()) {
                     if (fieldType.isArray())
                     {
-                        fieldType = DbgObjectType(fieldType.moduleName(), fieldType.dereferenced().name() + "[" + fieldType.arrayLength() + "]");
+                        fieldType = DbgObjectType(fieldType.moduleName(), fieldType.name() + "[" + fieldType.arrayLength() + "]");
                     }
                     else
                     {
@@ -932,7 +932,7 @@ Loader.OnLoad(function() {
                     if (!type.backingTypes[0].hasArrayItemField()) {
                         if (arrayToRender.length > 0) {
                             arrayToRender.forEach(function (entry, index) {
-                                var arrayItemField = new TypeExplorerField("[" + index + "]", type.backingTypes[0].type, function() { return entry; }, type.backingTypes[0], "arrayItemFields");
+                                var arrayItemField = new TypeExplorerField("[" + index + "]", type.backingTypes[0].type.nonArrayType(), function() { return entry; }, type.backingTypes[0], "arrayItemFields");
                                 type.backingTypes[0].arrayItemFields.push(arrayItemField);
                             });
                         }
