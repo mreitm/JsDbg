@@ -15,33 +15,37 @@ Loader.OnLoad(function() {
             }
         },
         GetRoots: function() {
-            return DbgObject.global(Chromium.RendererProcessSyntheticModuleName, "g_frame_map")
-            .then((frameMap) => Promise.map(frameMap.F("Object").array("Keys"), (webFramePointer) => webFramePointer.deref()))
-            .then((webFrames) => {
-                // Put the main frame (frame with a null parent) at the front of the array.
-                return Promise.sort(webFrames, (webFrame) => {
-                    return webFrame.f("parent_")
-                    .then((parentFrame) => !parentFrame.isNull());
-                });
-            })
-            .then((sortedWebFrames) => Promise.map(sortedWebFrames, (webFrame) => webFrame.vcast().f("frame_.raw_").f("dom_window_.raw_").F("document")))
-            .then((sortedDocuments) => Promise.filter(sortedDocuments, (document) => !document.isNull()))
-            .then((documents) => {
-                if (documents.length == 0) {
-                    var errorMessage = ErrorMessages.CreateErrorsList("No documents found.") +
-                        ErrorMessages.CreateErrorReasonsList(ErrorMessages.WrongDebuggee("the Chromium renderer process"),
-                            "The debuggee has been broken into prior to <i>g_frame_map</i> being populated.",
-                            ErrorMessages.SymbolsUnavailable) +
-                        "You may still specify a blink::Node explicitly.";
-                    return Promise.reject(errorMessage);
-                } else {
-                    return documents;
-                }
-            }, (error) => {
-                var errorMessage = ErrorMessages.CreateErrorsList(error) +
-                    ErrorMessages.CreateErrorReasonsList(ErrorMessages.WrongDebuggee("the Chromium renderer process"), ErrorMessages.SymbolsUnavailable);
-                return Promise.reject(errorMessage);
+            return DbgObject.teb()
+            .then((tebLocation) => {
+                debugger;
             });
+            // return DbgObject.global(Chromium.RendererProcessSyntheticModuleName, "g_frame_map")
+            // .then((frameMap) => Promise.map(frameMap.F("Object").array("Keys"), (webFramePointer) => webFramePointer.deref()))
+            // .then((webFrames) => {
+            //     // Put the main frame (frame with a null parent) at the front of the array.
+            //     return Promise.sort(webFrames, (webFrame) => {
+            //         return webFrame.f("parent_")
+            //         .then((parentFrame) => !parentFrame.isNull());
+            //     });
+            // })
+            // .then((sortedWebFrames) => Promise.map(sortedWebFrames, (webFrame) => webFrame.vcast().f("frame_.raw_").f("dom_window_.raw_").F("document")))
+            // .then((sortedDocuments) => Promise.filter(sortedDocuments, (document) => !document.isNull()))
+            // .then((documents) => {
+            //     if (documents.length == 0) {
+            //         var errorMessage = ErrorMessages.CreateErrorsList("No documents found.") +
+            //             ErrorMessages.CreateErrorReasonsList(ErrorMessages.WrongDebuggee("the Chromium renderer process"),
+            //                 "The debuggee has been broken into prior to <i>g_frame_map</i> being populated.",
+            //                 ErrorMessages.SymbolsUnavailable) +
+            //             "You may still specify a blink::Node explicitly.";
+            //         return Promise.reject(errorMessage);
+            //     } else {
+            //         return documents;
+            //     }
+            // }, (error) => {
+            //     var errorMessage = ErrorMessages.CreateErrorsList(error) +
+            //         ErrorMessages.CreateErrorReasonsList(ErrorMessages.WrongDebuggee("the Chromium renderer process"), ErrorMessages.SymbolsUnavailable);
+            //     return Promise.reject(errorMessage);
+            // });
         },
         DefaultTypes: [Chromium.RendererProcessType("blink::ContainerNode")]
     };

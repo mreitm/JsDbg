@@ -206,6 +206,10 @@ namespace JsDbg.Core {
             get { return this.debuggerEngine.IsPointer64Bit; }
         }
 
+        public ulong TebLocation {
+            get { return this.debuggerEngine.TebLocation; }
+        }
+
         public async Task<bool> IsTypeEnum(string module, string typename) {
             var type = await this.LoadType(module, typename);
             return type.IsEnum;

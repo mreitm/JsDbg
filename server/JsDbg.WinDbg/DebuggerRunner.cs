@@ -39,6 +39,19 @@ namespace JsDbg.WinDbg {
             get { return this.debugger; }
         }
 
+        public ulong TebLocation {
+            get { return this.systemObjects.CurrentThreadTeb; }
+        }
+
+        private void SetTargetThreadFromTargetProcess() {
+            foreach (ProcessThread processThread in this.TargetProcess.Threads) {
+                if (processThread.Id == this.systemObjects.CurrentThreadSystemId) {
+                    this.TargetThread = processThread;
+                    break;
+                }
+            }
+        }
+
         private void SetTargetProcessFromId(int processId) {
             try {
                 this.TargetProcess = Process.GetProcessById(processId);
@@ -46,11 +59,19 @@ namespace JsDbg.WinDbg {
                 // Target process is not running.
                 this.TargetProcess = null;
             }
+            if (this.TargetProcess != null) {
+                this.SetTargetThreadFromTargetProcess();
+            }
         }
 
         public Process TargetProcess {
             get { return this.targetProcess; }
             set { this.targetProcess = value; }
+        }
+
+        public ProcessThread TargetThread {
+            get { return this.targetThread; }
+            set { this.targetThread = value; }
         }
 
         public bool IsDebuggerBusy {
@@ -101,6 +122,7 @@ namespace JsDbg.WinDbg {
             while (!this.isShuttingDown) {
                 try {
                     int currentProcessSystemId = (int)(this.systemObjects.CurrentProcessSystemId);
+                    int currentThreadSystemId = (int)(this.systemObjects.CurrentThreadSystemId);
                     if (this.TargetProcess == null) {
                         this.SetTargetProcessFromId(currentProcessSystemId);
                         if (this.TargetProcess != null) {
@@ -109,6 +131,9 @@ namespace JsDbg.WinDbg {
                     } else if (this.TargetProcess.Id != currentProcessSystemId) {
                         this.SetTargetProcessFromId(currentProcessSystemId);
                         this.engine.NotifyDebuggerStatusChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingProcess);
+                    } else if(this.TargetThread.Id != currentThreadSystemId) {
+                        this.SetTargetThreadFromTargetProcess();
+                        this.engine.NotifyDebuggerStatusChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingThread);
                     }
 
                     this.client.DispatchCallbacks(TimeSpan.Zero);
@@ -148,6 +173,7 @@ namespace JsDbg.WinDbg {
         private SymbolCache symbolCache;
         private Dia.DiaSessionLoader diaLoader;
         private Process targetProcess;  // process being actively debugged
+        private ProcessThread targetThread;  // thread being actively debugged
         private bool isShuttingDown;
         private bool didShutdown;
     }
