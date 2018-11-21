@@ -11,7 +11,15 @@ Loader.OnLoad(function() {
         Chromium.RendererProcessType("gfx::Point"),
         "Point",
         true,
-        UserEditableFunctions.Create((size) => Promise.all([size.f("x_").val(), size.f("y_").val()])
+        UserEditableFunctions.Create((point) => Promise.all([point.f("x_").val(), point.f("y_").val()])
             .thenAll((first, second) => `{${first}, ${second}}`))
+    );
+
+    DbgObject.AddTypeDescription(
+        DbgObjectType("ui_base_ime", "gfx::Range"),
+        "Range",
+        true,
+        UserEditableFunctions.Create((range) => Promise.all([range.f("start_").val(), range.f("end_").val()])
+            .thenAll((start, end) => `{${start}, ${end}}`))
     );
 })
