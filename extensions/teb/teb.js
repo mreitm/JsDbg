@@ -32,7 +32,7 @@ Loader.OnLoad(function() {
             if (tlsExpansionSlots.isNull()) {
                 return tlsSlots.array(tlsMinimumAvailableSlots);
             } else {
-                return Promise.all([tlsSlots.array(tlsMinimumAvailableSlots), tlsExpansionSlots.array(tlsMaximumAvailableSlots - tlsMinimumAvailableSlots)])
+                return Promise.all([tlsSlots.array(tlsMinimumAvailableSlots), tlsExpansionSlots.deref().array(tlsMaximumAvailableSlots - tlsMinimumAvailableSlots)])
                 .thenAll((tlsSlotArray, tlsExpansionSlotArray) => {
                     return tlsSlotArray.concat(tlsExpansionSlotArray);
                 });
