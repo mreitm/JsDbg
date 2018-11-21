@@ -4,7 +4,8 @@
     "description": "Visualize the thread environment block (TEB)",
     "dependencies": [
         "dbgobject",
-        "tree-inspector"
+        "tree-inspector",
+        "user-editable-functions"
     ],
     "includes": [
         "teb.js"

@@ -14,7 +14,17 @@ Loader.OnLoad(function() {
         DefaultTypes: [DbgObjectType("ntdll", "_TEB")]
     };
 
-    DbgObject.AddArrayField(DbgObjectType("ntdll", "_TEB"), "TLS Slots", DbgObjectType("ntdll", "void*"), (teb) => {
+    DbgObject.AddTypeDescription(DbgObjectType("ntdll", "_TEB"), "Process ID", false, UserEditableFunctions.Create((teb) => {
+        return teb.f("ClientId").f("UniqueProcess").val()
+        .then((pid) => parseInt(pid));
+    }));
+
+    DbgObject.AddTypeDescription(DbgObjectType("ntdll", "_TEB"), "Thread ID", false, UserEditableFunctions.Create((teb) => {
+        return teb.f("ClientId").f("UniqueThread").val()
+        .then((tid) => parseInt(tid));
+    }));
+
+    DbgObject.AddArrayField(DbgObjectType("ntdll", "_TEB"), "TLS Slots", DbgObjectType("ntdll", "void*"), UserEditableFunctions.Create((teb) => {
         var tlsMinimumAvailableSlots = 64;
         var tlsMaximumAvailableSlots = 1088;
         return Promise.all([teb.f("TlsSlots"), teb.f("TlsExpansionSlots")])
@@ -28,5 +38,5 @@ Loader.OnLoad(function() {
                 });
             }
         });
-    });
+    }));
 });
