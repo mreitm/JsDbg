@@ -11,5 +11,8 @@
     ],
     "augments": [
         "dbgobject"
+    ],
+    "targetModules": [
+        "ntdll"
     ]
 }
