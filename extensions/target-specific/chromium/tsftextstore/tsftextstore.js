@@ -39,9 +39,34 @@ Loader.OnLoad(function() {
         DefaultTypes: [DbgObjectType("ui_base_ime", "ui::TSFTextStore")]
     };
 
-    // TreeExtensionTemplate.Tree.addChildren(DbgObjectType("ntdll!void"), (voidObj) => {
-    //     return [DbgObject.NULL];
-    // });
+    TSFTextStore.Tree.addChildren(DbgObjectType("ui_base_ime", "ui::TSFTextStore"), (tsfTextStore) => {
+        return Promise.all([
+            {
+                toString : () => {
+                    return "Selection";
+                },
+                getChildren : () => {
+                    return Promise.all([tsfTextStore.f("selection_").desc()]);
+                }
+            },
+            {
+                toString : () => {
+                    return "String Buffer";
+                },
+                getChildren : () => {
+                    return Promise.all([tsfTextStore.f("string_buffer_document_").desc()]);
+                }
+            },
+            {
+                toString : () => {
+                    return "Composition Range";
+                },
+                getChildren : () => {
+                    return Promise.all([tsfTextStore.f("composition_range_").desc()]);
+                }
+            }
+        ]);
+    });
 
     // TreeExtensionTemplate.Renderer.addNameRenderer(DbgObjectType("ntdll!void"), (voidObj) => {
     //     return "Type name to render";
