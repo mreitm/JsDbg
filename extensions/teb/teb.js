@@ -16,12 +16,12 @@ Loader.OnLoad(function() {
 
     DbgObject.AddTypeDescription(DbgObjectType("ntdll", "_TEB"), "Process ID", false, UserEditableFunctions.Create((teb) => {
         return teb.f("ClientId").f("UniqueProcess").val()
-        .then((pid) => parseInt(pid));
+        .then((pid) => (parseInt(pid) + " (" + pid + ")"));
     }));
 
     DbgObject.AddTypeDescription(DbgObjectType("ntdll", "_TEB"), "Thread ID", false, UserEditableFunctions.Create((teb) => {
         return teb.f("ClientId").f("UniqueThread").val()
-        .then((tid) => parseInt(tid));
+        .then((tid) => (parseInt(tid) + " (" + tid + ")"));
     }));
 
     DbgObject.AddArrayField(DbgObjectType("ntdll", "_TEB"), "TLS Slots", DbgObjectType("ntdll", "void*"), UserEditableFunctions.Create((teb) => {
