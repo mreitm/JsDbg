@@ -72,7 +72,7 @@ Loader.OnLoad(function () {
             JsDbgTransport.InvalidateFullCache();
             fireListeners(debuggerBrokeListeners);
             fireListeners(memoryWriteListeners);
-        } else if (message == "processchanged") {
+        } else if ((message == "threadchanged") || (message == "processchanged")) {
             JsDbgTransport.InvalidateFullCache();
             fireListeners(debuggerBrokeListeners);
             fireListeners(memoryWriteListeners);

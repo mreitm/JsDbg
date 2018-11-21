@@ -1394,6 +1394,8 @@ namespace JsDbg.Core {
                 this.SendWebSocketMessage("detaching");
             } else if (status == DebuggerChangeEventArgs.DebuggerStatus.ChangingBitness) {
                 this.SendWebSocketMessage("bitnesschanged");
+            } else if (status == DebuggerChangeEventArgs.DebuggerStatus.ChangingThread) {
+                this.SendWebSocketMessage("threadchanged");
             } else if (status == DebuggerChangeEventArgs.DebuggerStatus.ChangingProcess) {
                 this.SendWebSocketMessage("processchanged");
             }

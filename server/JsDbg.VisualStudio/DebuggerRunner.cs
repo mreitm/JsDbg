@@ -184,6 +184,8 @@ namespace JsDbg.VisualStudio {
 
                         this.engine.NotifyDebuggerChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingProcess);
                     }
+                } else {
+                    this.engine.NotifyDebuggerChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingThread);
                 }
             }
 

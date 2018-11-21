@@ -68,6 +68,7 @@ namespace JsDbg.Core {
             Waiting,
             Detaching,
             ChangingBitness,
+            ChangingThread,
             ChangingProcess
         }
 
