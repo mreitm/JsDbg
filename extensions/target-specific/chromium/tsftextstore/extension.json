@@ -8,7 +8,8 @@
         "tree-inspector",
         "target-specific/stl-helpers",
         "target-specific/chromium/chromium-helpers",
-        "target-specific/chromium/gfx-type-helpers"
+        "target-specific/chromium/gfx-type-helpers",
+        "teb"
     ],
     "includes": [
         "tsftextstore.js"
