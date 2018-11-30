@@ -135,14 +135,10 @@ namespace JsDbg.WinDbg {
                         } else if (this.TargetProcess.Id != currentProcessSystemId) {
                             this.SetTargetProcessFromId(currentProcessSystemId);
                             this.engine.NotifyDebuggerStatusChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingProcess);
-<<<<<<< HEAD
-                        }
-=======
                         } else if(this.TargetThread.Id != currentThreadSystemId) {
                             this.SetTargetThreadFromTargetProcess();
                             this.engine.NotifyDebuggerStatusChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingThread);
                         }
->>>>>>> master
                     }
 
                     this.client.DispatchCallbacks(TimeSpan.Zero);
