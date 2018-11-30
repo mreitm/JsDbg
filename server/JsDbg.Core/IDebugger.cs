@@ -89,7 +89,7 @@ namespace JsDbg.Core {
         Task<IEnumerable<SBaseTypeResult>> GetBaseTypes(string module, string typeName);
         bool IsDebuggerBusy { get; }
         bool IsPointer64Bit { get; }
-        ulong TebLocation { get; }
+        Task<ulong> TebAddress();
         Task<bool> IsTypeEnum(string module, string type);
         Task<IEnumerable<SConstantResult>> LookupConstants(string module, string type, ulong constantValue);
         Task<SConstantResult> LookupConstant(string module, string type, string constantName);

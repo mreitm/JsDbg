@@ -24,7 +24,9 @@ namespace JsDbg.WinDbg {
             this.didShutdown = true;
             this.engine = new DebuggerEngine(this, this.client, this.control, this.diaLoader);
             this.debugger = new Core.TypeCacheDebugger(this.engine);
-            this.SetTargetProcessFromId((int)(this.systemObjects.CurrentProcessSystemId));
+            if (!this.IsDebuggerBusy) {
+                this.SetTargetProcessFromId((int)(this.systemObjects.CurrentProcessSystemId));
+            }
         }
 
         public void Dispose() {
@@ -39,8 +41,9 @@ namespace JsDbg.WinDbg {
             get { return this.debugger; }
         }
 
-        public ulong TebLocation {
-            get { return this.systemObjects.CurrentThreadTeb; }
+        public ulong TebAddress() {
+            Debug.Assert(!this.IsDebuggerBusy);
+            return this.systemObjects.CurrentThreadTeb;
         }
 
         private void SetTargetThreadFromTargetProcess() {
@@ -132,7 +135,14 @@ namespace JsDbg.WinDbg {
                         } else if (this.TargetProcess.Id != currentProcessSystemId) {
                             this.SetTargetProcessFromId(currentProcessSystemId);
                             this.engine.NotifyDebuggerStatusChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingProcess);
+<<<<<<< HEAD
                         }
+=======
+                        } else if(this.TargetThread.Id != currentThreadSystemId) {
+                            this.SetTargetThreadFromTargetProcess();
+                            this.engine.NotifyDebuggerStatusChange(DebuggerChangeEventArgs.DebuggerStatus.ChangingThread);
+                        }
+>>>>>>> master
                     }
 
                     this.client.DispatchCallbacks(TimeSpan.Zero);

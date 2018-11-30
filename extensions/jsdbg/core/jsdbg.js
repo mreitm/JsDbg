@@ -310,13 +310,13 @@ Loader.OnLoad(function () {
             JsDbgTransport.JsonRequest("/jsdbg-server/array?type=" + esc(sizeName) + "&pointer=" + esc(pointer) + "&length=" + count, callback, JsDbgTransport.CacheType.TransientCache);
         },
 
-        _help_LookupTebLocation: {
-            description: "Gets the location of the thread environment block (TEB) for the current thread.",
+        _help_LookupTebAddress: {
+            description: "Gets the address of the thread environment block (TEB) for the current thread.",
             arguments: [
                 {name:"callback", type:"function(object)", description:"A callback that is called when the operation succeeds or fails."}
             ]
         },
-        LookupTebLocation: function(callback) {
+        LookupTebAddress: function(callback) {
             JsDbgTransport.JsonRequest("/jsdbg-server/teb", callback, JsDbgTransport.CacheType.Uncached);
         },
 

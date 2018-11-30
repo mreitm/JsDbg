@@ -33,8 +33,9 @@ namespace JsDbg.VisualStudio {
             get { return this.runner.IsPointer64Bit; }
         }
 
-        public ulong TebLocation {
-            get { return this.runner.TebLocation; }
+        public async Task<ulong> TebAddress() {
+            await this.runner.WaitForBreakIn();
+            return this.runner.TebAddress();
         }
 
         public async Task<Core.SModule> GetModuleForAddress(ulong address) {

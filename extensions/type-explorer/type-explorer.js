@@ -372,15 +372,8 @@ Loader.OnLoad(function() {
         .then(function (fields) {
             fields.forEach(function (field) {
                 var fieldType = field.value.type;
-                if (fieldType.isPointer()) {
-                    if (fieldType.isArray())
-                    {
-                        fieldType = DbgObjectType(fieldType.moduleName(), fieldType.name() + "[" + fieldType.arrayLength() + "]");
-                    }
-                    else
-                    {
-                        fieldType = fieldType.dereferenced();
-                    }
+                if (fieldType.isPointer() && !fieldType.isArray()) {
+                    fieldType = fieldType.dereferenced();
                 }
                 var getter = field.value.type.isArray() ? function (dbgObject) { return dbgObject.f(field.name).array(); } : function(dbgObject) { return dbgObject.f(field.name); };
                 that.fields.push(new TypeExplorerField(field.name, fieldType, getter, that, "fields"));

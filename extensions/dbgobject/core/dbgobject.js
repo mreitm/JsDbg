@@ -99,14 +99,12 @@ Loader.OnLoad(function() {
     }
 
     DbgObject._help_teb = {
-        description: "Looks up the location of the thread environment block (TEB) for the current thread.",
-        returns: "A promise to a DbgObject representing the head of the TEB."
+        description: "Looks up the thread environment block (TEB) for the current thread.",
+        returns: "A DbgObject representing the TEB."
     }
     DbgObject.teb = function() {
-        return JsDbgPromise.LookupTebLocation()
-        .then((tebLocation) => {
-            return DbgObject.create(DbgObjectType("ntdll", "_TEB"), tebLocation);
-        });
+        return JsDbgPromise.LookupTebAddress()
+        .then((tebAddress) => DbgObject.create(DbgObjectType("ntdll", "_TEB"), tebAddress));
     }
 
     DbgObject._help_global = {

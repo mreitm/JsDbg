@@ -359,7 +359,7 @@ namespace JsDbg.Core {
                     this.ServeTypeFields(query, respond, fail);
                     break;
                 case "teb":
-                    this.ServeTebLocation(query, respond, fail);
+                    this.ServeTebAddress(query, respond, fail);
                     break;
                 case "loadextension":
                     this.LoadExtension(query, respond, fail);
@@ -945,15 +945,15 @@ namespace JsDbg.Core {
             respond(responseString);
         }
 
-        private void ServeTebLocation(NameValueCollection query, Action<string> respond, Action fail) {
-            ulong tebLocation = this.debugger.TebLocation;
+        private async void ServeTebAddress(NameValueCollection query, Action<string> respond, Action fail) {
+            ulong tebAddress = await this.debugger.TebAddress();
 
-            if (tebLocation <= 0) {
-                respond(this.JSONError("Unable to access the persistent store."));
+            if (tebAddress <= 0) {
+                respond(this.JSONError("Unable to access the TEB address."));
             } else {
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ulong));
                 using (System.IO.MemoryStream memoryStream = new System.IO.MemoryStream()) {
-                    serializer.WriteObject(memoryStream, tebLocation);
+                    serializer.WriteObject(memoryStream, tebAddress);
                     string result = Encoding.Default.GetString(memoryStream.ToArray());
                     respond(result);
                 }
