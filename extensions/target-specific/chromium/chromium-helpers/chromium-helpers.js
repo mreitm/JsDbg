@@ -15,10 +15,7 @@ var Chromium = null;
             (type) => type.name().match(/^base::NoDestructor<.*>/),
             "Object",
             (type) => DbgObjectType(type.templateParameters()[0], type),
-            (noDestructor) => {
-                debugger;
-                return noDestructor.f("storage_").as(noDestructor.type.templateParameters()[0] + "*").deref();
-            }
+            (noDestructor) => noDestructor.f("storage_").as(noDestructor.type.templateParameters()[0] + "*").deref()
         );
 
         Chromium = {
