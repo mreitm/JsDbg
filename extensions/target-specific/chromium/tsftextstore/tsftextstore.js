@@ -22,12 +22,13 @@ Loader.OnLoad(function() {
         GetRoots: function() {
             return Promise.all([DbgObject.global("ui_base_ime", "tsf_bridge_tls").F("Object").f("slot_").pointerValue(), DbgObject.teb(), DbgObject.global("base", "g_native_tls_key").val()])
             .thenAll((bigIntForSlotNumber, teb, tlsKey) => {
-                return Promise.all([Promise.map(teb.array("TLS Slots"), (slotPtr) => slotPtr.deref()), Promise.resolve(bigIntForSlotNumber.valueOf())])
-                .thenAll((tlsSlotsArray, slotNumber) => {
+                return Promise.map(teb.array("TLS Slots"), (slotPtr) => slotPtr.deref())
+                .then((tlsSlotsArray) => {
                     var tlsVectorEntry = tlsSlotsArray[tlsKey];
                     if (!tlsVectorEntry.isNull()) {
-                        var invalidSlotValue = -1; // ?
-                        var maxThreadLocalStorageSize = 256; // ?
+                        var invalidSlotValue = -1;
+                        var maxThreadLocalStorageSize = 256;
+                        var slotNumber = bigIntForSlotNumber.valueOf();
                         if ((slotNumber < maxThreadLocalStorageSize) && (slotNumber != invalidSlotValue)) {
                             return tlsVectorEntry.as("void*").idx(slotNumber * 2).deref()  // ?
                             .then((tlsVectorEntryData) => {
@@ -59,6 +60,8 @@ Loader.OnLoad(function() {
                         } else {
                             return Promise.resolve([]);
                         }
+                    } else {
+                        return Promise.resolve([]);
                     }
                 });
             });
@@ -120,9 +123,7 @@ Loader.OnLoad(function() {
                                         .then((view) => view.equals(activeView));
                                     });
                                 })
-                                .then((activeViewPair) => {
-                                    return activeViewPair[0].f("second");
-                                })
+                                .then((activeViewPair) => activeViewPair[0].f("second"))
                                 .then((textInputState) => textInputState.f("type").val());
                             } else {
                                 return DbgObject.constantValue(DbgObjectType("ui_base_ime", "ui::TextInputType"), "TEXT_INPUT_TYPE_NONE");
@@ -139,7 +140,7 @@ Loader.OnLoad(function() {
                     if (readOnly || !enabled) {
                         return DbgObject.constantValue(DbgObjectType("ui_base_ime", "ui::TextInputType"), "TEXT_INPUT_TYPE_NONE");
                     } else {
-                        return textField.f("text_input_type_")
+                        return textField.f("text_input_type_");
                     }
                 });
             }
